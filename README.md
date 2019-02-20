@@ -5,7 +5,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## New release soon
 
-> I am working on the new release with many extra features, rewrite almost every component using React Hooks, new manager API  and new design! You can preview my work on develop branch - stay tuned!
+> I am working on the new release with many extra features, rewrite almost every component using React Hooks, new manager API  and new design! You can preview my work on develop branch - stay tuned! :eyes:
 
 ## Features
 
@@ -54,8 +54,6 @@ In order to start the development server:
 
 `npm run dev`
 
-_As of version 2.2 because there are some core dependencies updates you have to remove the node_modules folders and run a clean install_
-
 ## Contribution
 
 If you'd like to make some changes:
@@ -77,8 +75,5 @@ _Material-ui https://material-ui-next.com/_
 
 _Webpack https://github.com/webpack/webpack_
 
-_d3js https://d3js.org/_
 
-
-
-### In memory of my friend luna - rest in peace my love <3
+### In memory of my friend luna - rest in peace my love :heart:
