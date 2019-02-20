@@ -5,7 +5,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## New release soon
 
-I am working on the new release with many extra features, rewrite almost every component using React Hooks, new manager API  and new design! You can preview my work on develop branch - stay tuned :)
+> I am working on the new release with many extra features, rewrite almost every component using React Hooks, new manager API  and new design! You can preview my work on develop branch - stay tuned!
 
 ## Features
 
