@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 
-npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
+npm desktop manager for managing npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
 
 ## Features
 
@@ -37,7 +37,6 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 - Bug fixes
 
 - Electron v4 and webpack v4 added
-
 
 ## Binaries
 
@@ -74,6 +73,5 @@ _ReactJS https://reactjs.org/_
 _Material-ui https://material-ui-next.com/_
 
 _Webpack https://github.com/webpack/webpack_
-
 
 ### In memory of my friend luna - rest in peace my love :heart:
