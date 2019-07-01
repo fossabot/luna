@@ -31,44 +31,51 @@ const execute = (
 
   const resultP = new Promise(resolve => {
     const result = [];
+    let workingDir = cwd;
     let errors = '';
 
     log.info(
       chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
+    if (directory && mode === 'local') {
+      workingDir =
+        operation === 'init'
+          ? path.resolve(directory)
+          : path.dirname(directory);
+    }
+
     // on windows use npm.cmd
-    const command = spawn(
+    const child = spawn(
       /^win/.test(process.platform) ? `${manager}.cmd` : manager,
       commandArgs,
       {
         env: process.env,
-        cwd:
-          mode === 'local' && directory
-            ? operation === 'init'
-              ? path.resolve(directory)
-              : path.dirname(directory)
-            : cwd
+        cwd: workingDir
       }
     );
 
-    command.stdout.on('data', data => {
+    child.stdout.on('data', data => {
       const dataString = String(data);
 
       result.push(dataString);
     });
 
-    command.stderr.on('data', error => {
+    child.stderr.on('data', error => {
       const errorString = String(error);
 
       errors += errorString;
     });
 
-    command.on('exit', code => {
+    child.on('exit', code => {
       log.info(chalk.yellow.bold(`child exited with code ${code}`));
     });
 
-    command.on('close', () => {
+    child.on('error', err => {
+      log.info(chalk.red.bold(err));
+    });
+
+    child.on('close', () => {
       log.info(
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
@@ -98,18 +105,6 @@ const list = (options, callback) => {
   const command = ['list'];
   const { mode, directory, linked } = options || {};
 
-  if (!callback || typeof callback !== 'function') {
-    return Promise.reject(
-      'manager[list]: callback must be given and must be a function'
-    );
-  }
-
-  if (!mode || typeof mode !== 'string') {
-    return Promise.reject(
-      'manager[list]: mode must be given and must be one of "global" or "local"'
-    );
-  }
-
   try {
     const run =
       mode === 'global' && !directory
@@ -118,7 +113,6 @@ const list = (options, callback) => {
           : command.concat(defaultsArgs.list, ['-g'])
         : command.concat(defaultsArgs.list);
 
-    // returns a Promise
     return execute('npm', run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
@@ -134,25 +128,12 @@ const outdated = (options, callback) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
-  if (!callback || typeof callback !== 'function') {
-    return Promise.reject(
-      'manager[outdated]: callback must be given and must be a function'
-    );
-  }
-
-  if (!mode || typeof mode !== 'string') {
-    return Promise.reject(
-      'manager[outdated]: mode must be given and must be one of "global" or "local"'
-    );
-  }
-
   try {
     const run =
       mode === 'global' && !directory
         ? command.concat(defaultsArgs.list, ['-g'])
         : command.concat(defaultsArgs.list);
 
-    // returns a Promise
     return execute('npm', run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
@@ -168,10 +149,6 @@ const search = (opts, callback) => {
   const command = ['search'];
   const { directory, mode, pkgName } = opts || {};
   const defaults = ['--depth=0', '--json'];
-
-  if (!pkgName) {
-    return Promise.reject('npm[search] package name parameter must be given');
-  }
 
   try {
     const run = command.concat(defaults, pkgName);

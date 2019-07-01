@@ -20,19 +20,18 @@ const install = (options, idx) => {
     packageJson
   } = options || {};
 
-  // '--unsafe-perm use root'
   // '--ignore-scripts
-  const defaults = ['--verbose'];
+  // '--verbose'
+  // '--no-shrinkwrap'
+  const defaults = ['--no-shrinkwrap'];
+  let packagesToInstall;
 
   // install from package.json file
   if (packageJson) {
     return command.concat(['--ignore-scripts']);
   }
 
-  // attach -g option if mode is global
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  let packagesToInstall;
 
   // handle installation of a single package
   if (single) {
@@ -40,7 +39,7 @@ const install = (options, idx) => {
   }
 
   // handle installation of multiple packages
-  if (multiple && packages) {
+  if (multiple && packages && !single) {
     if (idx > -1 && packages.length > 1) {
       packagesToInstall = packages[idx];
     } else {
@@ -48,7 +47,7 @@ const install = (options, idx) => {
     }
   }
 
-  // get installation options
+  // set installation options
   const hasOptions = Array.isArray(pkgOptions) && pkgOptions.length;
   const commandOptions =
     mode === 'local' && hasOptions

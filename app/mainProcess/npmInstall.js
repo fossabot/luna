@@ -31,9 +31,9 @@ const onNpmInstall = (event, options, store) => {
     const { status, errors, data, cmd } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: onFlow,
       close: () => onComplete(errors, data, cmd),
-      error: error => onError(error)
+      error: onError
     })(null)(status);
   };
 

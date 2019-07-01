@@ -13,7 +13,6 @@ import manager from './manager';
 const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
-  // construct an array of promises. Each promise is an npm command
   const combine = () =>
     cmd.map((command, idx) => {
       try {
@@ -27,23 +26,11 @@ const runCommand = (options, callback) => {
       }
     });
 
-  // array of promises
   const tasks = combine();
 
-  // run in serial
-  tasks
-    .reduce(
-      (promiseChain, currentTask) =>
-        promiseChain.then(chainResults =>
-          currentTask.then(currentResult => [...chainResults, currentResult])
-        ),
-      Promise.resolve([])
-    )
-    .then(results => results.map(result => callback(result)))
-    .catch(error => {
-      log.error(error);
-      return Promise.reject(error);
-    });
+  Promise.all(tasks)
+    .then(results => results.forEach(result => callback(result)))
+    .catch(error => Promise.reject(error));
 };
 
 export default runCommand;
